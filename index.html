@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0f" id="metaTheme">
+  <!-- Theme ngay lập tức - trước khi render, chống flash trắng -->
+  <script>
+    (function () {
+      var KEY = "phuc-ka-theme";
+      var saved = localStorage.getItem(KEY);
+      var theme = saved === "light" || saved === "dark" ? saved : null;
+      if (!theme) {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      var isDark = theme === "dark";
+      var root = document.documentElement;
+      root.classList.add("preload");
+      root.classList.toggle("dark", isDark);
+      root.style.colorScheme = isDark ? "dark" : "light";
+      root.style.backgroundColor = isDark ? "#0a0a0f" : "#f8f8fc";
+      var meta = document.getElementById("metaTheme");
+      if (meta) meta.setAttribute("content", isDark ? "#0a0a0f" : "#f8f8fc");
+    })();
+  </script>
+  <style>
+    html { background-color: #f8f8fc; color-scheme: light; }
+    html.dark { background-color: #0a0a0f; color-scheme: dark; }
+  </style>
+  <meta name="description" content="PHUC KA - Fullstack Developer. Thiết kế và phát triển website, ứng dụng theo yêu cầu. Spring Boot, React, deploy VPS/Docker.">
+  <meta name="keywords" content="PHUC KA, lập trình viên fullstack, freelancer, website, Spring Boot, React">
+  <meta name="author" content="PHUC KA">
+  <title>PHUC KA | Fullstack Developer</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0f'/%3E%3Ctext x='32' y='42' font-family='system-ui,sans-serif' font-size='22' font-weight='700' fill='%23b39aff' text-anchor='middle'%3EPK%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Loading intro -->
+  <div id="loader" class="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <div class="loader__logo">
+        <span class="loader__logo-text">PHUC KA</span>
+        <span class="loader__logo-ring"></span>
+      </div>
+      <div class="loader__bar"><span class="loader__bar-fill"></span></div>
+      <p class="loader__hint">Đang tải trải nghiệm...</p>
+    </div>
+  </div>
+
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <!-- Navbar -->
+  <header class="header" id="header">
+    <nav class="nav container" aria-label="Điều hướng chính">
+      <a href="#home" class="nav__logo" aria-label="PHUC KA - Trang chủ">
+        <span class="nav__logo-mark">PK</span>
+        <span class="nav__logo-text">PHUC KA</span>
+      </a>
+
+      <ul class="nav__menu" id="navMenu">
+        <li><a href="#home" class="nav__link active">Trang chủ</a></li>
+        <li><a href="#about" class="nav__link">Giới thiệu</a></li>
+        <li><a href="#skills" class="nav__link">Kỹ năng</a></li>
+        <li><a href="#projects" class="nav__link">Dự án</a></li>
+        <li><a href="#services" class="nav__link">Dịch vụ</a></li>
+        <li><a href="#contact" class="nav__link">Liên hệ</a></li>
+      </ul>
+
+      <div class="nav__actions">
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Chuyển giao diện sáng tối">
+          <i data-lucide="sun" class="theme-toggle__icon theme-toggle__icon--light"></i>
+          <i data-lucide="moon" class="theme-toggle__icon theme-toggle__icon--dark"></i>
+        </button>
+        <button type="button" class="nav__toggle" id="navToggle" aria-label="Mở menu" aria-expanded="false">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero section" id="home">
+      <div class="hero__glow hero__glow--1" aria-hidden="true"></div>
+      <div class="hero__glow hero__glow--2" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero__grid">
+        <div class="hero__text">
+          <p class="hero__badge reveal">
+            <i data-lucide="sparkles"></i>
+            Sẵn sàng nhận dự án mới
+          </p>
+          <h1 class="hero__title reveal">
+            <span class="hero__name">PHUC KA</span>
+            <span class="hero__role">Fullstack Developer</span>
+          </h1>
+          <p class="hero__subtitle reveal">
+            Thiết kế và phát triển website/app theo yêu cầu.
+          </p>
+          <div class="hero__cta reveal">
+            <a href="#projects" class="btn btn--primary">
+              <i data-lucide="folder-kanban"></i>
+              Xem dự án
+            </a>
+            <a href="#contact" class="btn btn--outline">
+              <i data-lucide="send"></i>
+              Liên hệ ngay
+            </a>
+          </div>
+        </div>
+        <div class="hero__visual reveal">
+          <div class="hero__image-wrap img-overlay">
+            <img
+              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900&q=80&auto=format&fit=crop"
+              alt="Công nghệ và phát triển phần mềm hiện đại"
+              width="560"
+              height="420"
+              loading="eager"
+            >
+          </div>
+          <div class="hero__float hero__float--1 glass">
+            <i data-lucide="code-2"></i>
+            <span>Mã sạch</span>
+          </div>
+          <div class="hero__float hero__float--2 glass">
+            <i data-lucide="zap"></i>
+            <span>Hiệu năng cao</span>
+          </div>
+        </div>
+        </div>
+      </div>
+      <a href="#about" class="scroll-indicator" aria-label="Cuộn xuống phần giới thiệu">
+        <span class="scroll-indicator__wheel"></span>
+      </a>
+    </section>
+
+    <!-- Giới thiệu -->
+    <section class="about section" id="about">
+      <div class="section__glow" aria-hidden="true"></div>
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__tag">Giới thiệu</span>
+          <h2 class="section__title">Về PHUC KA</h2>
+        </header>
+
+        <div class="about__layout">
+          <div class="about__profile reveal">
+            <div class="about__avatar img-overlay">
+              <img
+                src="https://images.unsplash.com/photo-1531482615710-2afd69097998?w=500&q=80&auto=format&fit=crop"
+                alt="Developer workspace - PHUC KA"
+                width="400"
+                height="480"
+                loading="lazy"
+              >
+            </div>
+            <div class="about__stats">
+              <div class="stat-card glass">
+                <strong>15+</strong>
+                <span>Dự án thực tế</span>
+              </div>
+              <div class="stat-card glass">
+                <strong>Fullstack</strong>
+                <span>Web &amp; hệ thống</span>
+              </div>
+              <div class="stat-card glass">
+                <strong>24/7</strong>
+                <span>Hỗ trợ deploy</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about__content">
+            <div class="about__cards">
+              <article class="about__card glass reveal">
+                <i data-lucide="graduation-cap"></i>
+                <p>Sinh viên chuyên ngành CNTT tại Trường Đại học Tây Bắc.</p>
+              </article>
+              <article class="about__card glass reveal">
+                <i data-lucide="heart-pulse"></i>
+                <p>Đam mê lập trình và xây dựng sản phẩm thực tế.</p>
+              </article>
+              <article class="about__card glass reveal">
+                <i data-lucide="layers"></i>
+                <p>Có thể phát triển từ website giới thiệu đến hệ thống quản lý.</p>
+              </article>
+              <article class="about__card glass reveal">
+                <i data-lucide="target"></i>
+                <p>Tư duy thực chiến, ưu tiên giải pháp hiệu quả.</p>
+              </article>
+              <article class="about__card glass reveal">
+                <i data-lucide="server"></i>
+                <p>Hỗ trợ deploy VPS, Docker, Nginx và cấu hình domain.</p>
+              </article>
+              <article class="about__card glass reveal">
+                <i data-lucide="puzzle"></i>
+                <p>Nhận sản phẩm theo yêu cầu riêng, linh hoạt theo nhu cầu.</p>
+              </article>
+            </div>
+            <a href="https://www.facebook.com/Dev3s.Phuc" class="btn btn--ghost about__fb reveal" target="_blank" rel="noopener noreferrer">
+              <i data-lucide="facebook"></i>
+              Facebook: Dev3s.Phuc
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kỹ năng -->
+    <section class="skills section" id="skills">
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__tag">Kỹ năng</span>
+          <h2 class="section__title">Công nghệ sử dụng</h2>
+          <p class="section__desc reveal">
+            Ngôn ngữ hay framework chỉ là công cụ, quan trọng là giải quyết được bài toán thực tế.
+          </p>
+        </header>
+
+        <div class="skills__grid">
+          <article class="skill-card glass reveal" data-skill>
+            <div class="skill-card__head">
+              <i data-lucide="database"></i>
+              <h3>Backend</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span>Spring Boot</span><div class="skill-bar" data-level="92"></div></li>
+              <li><span>Laravel</span><div class="skill-bar" data-level="85"></div></li>
+              <li><span>ASP .NET Core</span><div class="skill-bar" data-level="80"></div></li>
+              <li><span>Node.js</span><div class="skill-bar" data-level="88"></div></li>
+              <li><span>Express.js</span><div class="skill-bar" data-level="86"></div></li>
+            </ul>
+          </article>
+          <article class="skill-card glass reveal" data-skill>
+            <div class="skill-card__head">
+              <i data-lucide="monitor-smartphone"></i>
+              <h3>Frontend</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span>React TypeScript</span><div class="skill-bar" data-level="90"></div></li>
+              <li><span>Thymeleaf</span><div class="skill-bar" data-level="82"></div></li>
+              <li><span>HTML / CSS / JS</span><div class="skill-bar" data-level="95"></div></li>
+            </ul>
+          </article>
+          <article class="skill-card glass reveal" data-skill>
+            <div class="skill-card__head">
+              <i data-lucide="hard-drive"></i>
+              <h3>Database</h3>
+            </div>
+            <ul class="skill-list">
+              <li><span>MySQL</span><div class="skill-bar" data-level="90"></div></li>
+              <li><span>SQL Server</span><div class="skill-bar" data-level="85"></div></li>
+              <li><span>MongoDB</span><div class="skill-bar" data-level="83"></div></li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="skills__visual reveal">
+          <div class="skills__img img-overlay">
+            <img
+              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=80&auto=format&fit=crop"
+              alt="Coding setup - workspace developer"
+              width="800"
+              height="450"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dự án -->
+    <section class="projects section" id="projects">
+      <div class="section__glow section__glow--right" aria-hidden="true"></div>
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__tag">Dự án</span>
+          <h2 class="section__title">Sản phẩm đã triển khai</h2>
+        </header>
+
+        <div class="projects__grid">
+          <article class="project-card glass reveal">
+            <div class="project-card__media img-overlay">
+              <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=600&q=80&auto=format&fit=crop" alt="Hệ thống đặt lịch sân bóng" loading="lazy">
+            </div>
+            <div class="project-card__body">
+              <div class="project-card__tags"><span>Spring Boot</span><span>React</span><span>MySQL</span></div>
+              <h3>Hệ thống đặt lịch sân bóng</h3>
+              <p>Quản lý lịch, sân và người dùng trên nền web.</p>
+            </div>
+          </article>
+
+          <article class="project-card glass reveal">
+            <div class="project-card__media img-overlay">
+              <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80&auto=format&fit=crop" alt="Website quản lý thuê phòng" loading="lazy">
+            </div>
+            <div class="project-card__body">
+              <div class="project-card__tags"><span>Laravel</span><span>React</span><span>MySQL</span></div>
+              <h3>Website quản lý thuê phòng</h3>
+              <p>Phòng, hợp đồng, thanh toán và báo cáo.</p>
+            </div>
+          </article>
+
+          <article class="project-card glass reveal">
+            <div class="project-card__media img-overlay">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80&auto=format&fit=crop" alt="Landing page sản phẩm" loading="lazy">
+            </div>
+            <div class="project-card__body">
+              <div class="project-card__tags"><span>Node.js</span><span>HTML/CSS</span><span>MongoDB</span></div>
+              <h3>Landing page sản phẩm</h3>
+              <p>Trang đích chuyển đổi cao, UI hiện đại.</p>
+            </div>
+          </article>
+
+          <article class="project-card glass reveal">
+            <div class="project-card__media img-overlay">
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80&auto=format&fit=crop" alt="Dashboard quản lý" loading="lazy">
+            </div>
+            <div class="project-card__body">
+              <div class="project-card__tags"><span>Spring Boot</span><span>React TS</span><span>MySQL</span></div>
+              <h3>Dashboard quản lý</h3>
+              <p>Biểu đồ, thống kê và quản trị hệ thống.</p>
+            </div>
+          </article>
+
+          <article class="project-card glass reveal">
+            <div class="project-card__media img-overlay">
+              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80&auto=format&fit=crop" alt="Website doanh nghiệp" loading="lazy">
+            </div>
+            <div class="project-card__body">
+              <div class="project-card__tags"><span>Laravel</span><span>HTML/CSS</span><span>MySQL</span></div>
+              <h3>Website doanh nghiệp</h3>
+              <p>Thương hiệu chuyên nghiệp, tốc độ và chuẩn SEO.</p>
+            </div>
+          </article>
+
+          <article class="project-card project-card--featured glass reveal">
+            <div class="project-card__media img-overlay">
+              <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80&auto=format&fit=crop" alt="TBUSPORT - dự án nổi bật" loading="lazy">
+              <span class="project-card__badge">Nổi bật</span>
+            </div>
+            <div class="project-card__body">
+              <div class="project-card__tags"><span>Spring Boot</span><span>React</span><span>MySQL</span></div>
+              <h3>TBUSPORT</h3>
+              <p>Hệ thống đặt lịch sân bóng - Đại học Tây Bắc.</p>
+              <a href="http://tbusport.utb.edu.vn" class="project-card__link" target="_blank" rel="noopener noreferrer">
+                tbusport.utb.edu.vn
+                <i data-lucide="external-link"></i>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dịch vụ -->
+    <section class="services section" id="services">
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__tag">Dịch vụ</span>
+          <h2 class="section__title">Giải pháp cho doanh nghiệp</h2>
+          <p class="section__desc reveal">
+            Có thể nhận dự án vừa và nhỏ. Hỗ trợ deploy và vận hành. Giá cả thương lượng linh hoạt.
+          </p>
+        </header>
+
+        <div class="services__layout">
+          <div class="services__visual reveal">
+            <div class="services__img img-overlay">
+              <img
+                src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&auto=format&fit=crop"
+                alt="Server và DevOps infrastructure"
+                width="700"
+                height="460"
+                loading="lazy"
+              >
+            </div>
+          </div>
+          <ul class="services__list reveal">
+            <li><i data-lucide="check-circle-2"></i> Thiết kế website theo yêu cầu</li>
+            <li><i data-lucide="check-circle-2"></i> Fullstack Development</li>
+            <li><i data-lucide="check-circle-2"></i> Responsive UI/UX</li>
+            <li><i data-lucide="check-circle-2"></i> VPS Deploy</li>
+            <li><i data-lucide="check-circle-2"></i> Docker / Nginx Setup</li>
+            <li><i data-lucide="check-circle-2"></i> API Integration</li>
+            <li><i data-lucide="check-circle-2"></i> Bảo trì hệ thống</li>
+          </ul>
+        </div>
+
+        <div class="pricing__grid">
+          <article class="pricing-card glass reveal">
+            <h3>Website giới thiệu</h3>
+            <p class="pricing-card__price">1tr500k - 2tr500k</p>
+            <p class="pricing-card__note">Landing, portfolio, giới thiệu doanh nghiệp</p>
+          </article>
+          <article class="pricing-card pricing-card--highlight glass reveal">
+            <h3>Website vừa</h3>
+            <p class="pricing-card__price">5tr - 8tr</p>
+            <p class="pricing-card__note">Quản lý, dashboard, nhiều module</p>
+          </article>
+          <article class="pricing-card glass reveal">
+            <h3>Dự án lớn</h3>
+            <p class="pricing-card__price">&gt;= 10tr</p>
+            <p class="pricing-card__note">Hệ thống phức tạp, tích hợp nhiều phần</p>
+          </article>
+        </div>
+        <p class="services__joke reveal">
+          Nếu hệ thống quá lớn thì chắc phải thức xuyên đêm mới nổi.
+        </p>
+      </div>
+    </section>
+
+    <!-- Liên hệ -->
+    <section class="contact section" id="contact">
+      <div class="section__glow" aria-hidden="true"></div>
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__tag">Liên hệ</span>
+          <h2 class="section__title">Kết nối với PHUC KA</h2>
+        </header>
+
+        <div class="contact__layout">
+          <div class="contact__banner reveal img-overlay">
+            <img
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&q=80&auto=format&fit=crop"
+              alt="Team collaboration - liên hệ dự án"
+              width="900"
+              height="320"
+              loading="lazy"
+            >
+            <div class="contact__banner-text">
+              <h3>Sẵn sàng bắt đầu dự án của bạn?</h3>
+              <p>Trao đổi nhanh qua Messenger hoặc Facebook.</p>
+            </div>
+          </div>
+
+          <div class="contact__grid">
+            <a href="https://www.facebook.com/Dev3s.Phuc" class="contact-card glass reveal" target="_blank" rel="noopener noreferrer">
+              <i data-lucide="facebook"></i>
+              <h3>Facebook</h3>
+              <p>Dev3s.Phuc</p>
+            </a>
+            <a href="https://m.me/Dev3s.Phuc" class="contact-card glass reveal" target="_blank" rel="noopener noreferrer">
+              <i data-lucide="message-circle"></i>
+              <h3>Messenger</h3>
+              <p>m.me/Dev3s.Phuc</p>
+            </a>
+            <a href="mailto:phucka.dev@example.com" class="contact-card glass reveal">
+              <i data-lucide="mail"></i>
+              <h3>Email</h3>
+              <p>phucbv.k63cntt-b@utb.edu.vn</p>
+            </a>
+          </div>
+        </div>
+
+        <div class="contact__cta reveal">
+          <a href="https://m.me/Dev3s.Phuc" class="btn btn--primary btn--lg" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="message-square"></i>
+            Nhắn tin ngay
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 PHUC KA. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <a href="https://m.me/Dev3s.Phuc" class="messenger-fab" target="_blank" rel="noopener noreferrer" aria-label="Nhắn tin Messenger">
+    <span class="messenger-fab__pulse" aria-hidden="true"></span>
+    <span class="messenger-fab__glow" aria-hidden="true"></span>
+    <i data-lucide="message-circle"></i>
+  </a>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
