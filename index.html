@@ -193,6 +193,18 @@
       </ul>
 
       <div class="nav__actions">
+        <!-- Bộ chọn ngôn ngữ — không dịch vùng này -->
+        <div class="lang-switcher" id="langSwitcher" data-no-translate="true">
+          <button type="button" class="lang-switcher__trigger" id="langTrigger" aria-haspopup="listbox"
+            aria-expanded="false" aria-label="Chọn ngôn ngữ">
+            <i data-lucide="languages" class="lang-switcher__icon" aria-hidden="true"></i>
+            <span class="lang-switcher__code" id="langCode">VI</span>
+            <i data-lucide="chevron-down" class="lang-switcher__chevron" aria-hidden="true"></i>
+            <span class="lang-switcher__spinner" id="langSpinner" aria-hidden="true"></span>
+          </button>
+          <!-- Danh sách ngôn ngữ render bằng JS (script.js → TRANSLATE_LANGUAGES) -->
+          <ul class="lang-switcher__menu" id="langMenu" role="listbox" aria-hidden="true"></ul>
+        </div>
         <button type="button" class="theme-toggle" id="themeToggle" aria-label="Chuyển giao diện sáng tối">
           <i data-lucide="sun" class="theme-toggle__icon theme-toggle__icon--light"></i>
           <i data-lucide="moon" class="theme-toggle__icon theme-toggle__icon--dark"></i>
@@ -316,7 +328,11 @@
             </div>
             <a href="https://www.facebook.com/Dev3s.Phuc" class="btn btn--ghost about__fb reveal" target="_blank"
               rel="noopener noreferrer">
-              <i data-lucide="facebook"></i>
+              <svg class="icon-fb" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
               Facebook: Dev3s.Phuc
             </a>
           </div>
@@ -594,7 +610,11 @@
           <div class="contact__grid">
             <a href="https://www.facebook.com/Dev3s.Phuc" class="contact-card glass reveal" target="_blank"
               rel="noopener noreferrer">
-              <i data-lucide="facebook"></i>
+              <svg class="icon-fb" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
               <h3>Facebook</h3>
               <p>Dev3s.Phuc</p>
             </a>
@@ -624,7 +644,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2026 PHUC KA. All rights reserved.</p>
+      <p>&copy; <span id="year"></span> PHUC KA. Mọi quyền được bảo lưu.</p>
     </div>
   </footer>
 
