@@ -4,7 +4,9 @@
  */
 
 const STORAGE_THEME = "phuc-ka-theme";
-const LOADER_MS = 1500;
+const LOADER_MIN_MS = 2500;
+const LOADER_MAX_MS = 3200;
+const LOADER_FADE_MS = 850;
 const NAV_BREAKPOINT = 992;
 
 /* ===== Theme (class .dark trên documentElement) ===== */
@@ -44,6 +46,7 @@ const DOM = {};
 
 const cacheDOM = () => {
   DOM.loader = document.getElementById("loader");
+  DOM.loaderLogo = document.getElementById("loaderLogoImg");
   DOM.header = document.getElementById("header");
   DOM.navToggle = document.getElementById("navToggle");
   DOM.navMenu = document.getElementById("navMenu");
@@ -77,17 +80,103 @@ const initThemeToggle = () => {
   });
 };
 
-/* ===== Loading intro ===== */
+/* ===== Loading intro — glow ngay lập tức, tối thiểu 2.5s sau khi page + logo loaded ===== */
 const initLoader = () => {
-  document.body.classList.add("no-scroll");
+  const loader = DOM.loader;
+  if (!loader) {
+    document.body.classList.remove("is-loading");
+    document.body.classList.add("is-ready");
+    return;
+  }
+
+  document.body.classList.add("no-scroll", "is-loading");
   DOM.navLogo?.classList.add("is-reload");
 
-  setTimeout(() => {
+  let finished = false;
+  let finishScheduled = false;
+  const startedAt = Date.now();
+  const gates = { page: false, logo: false };
+
+  const finishLoader = () => {
+    if (finished) return;
+    finished = true;
+
     DOM.navLogo?.classList.remove("is-reload");
-    DOM.loader?.classList.add("is-hidden");
-    document.body.classList.remove("no-scroll");
-    document.body.classList.add("is-ready");
-  }, LOADER_MS);
+    loader.classList.add("is-exiting");
+    loader.setAttribute("aria-busy", "false");
+
+    loader.addEventListener(
+      "animationend",
+      (e) => {
+        if (e.target !== loader || e.animationName !== "fadeOutLoader") return;
+        loader.classList.add("is-hidden");
+        document.body.classList.remove("no-scroll", "is-loading");
+        document.body.classList.add("is-ready");
+        loader.remove();
+      },
+      { once: true }
+    );
+
+    setTimeout(() => {
+      if (!document.body.classList.contains("is-ready")) {
+        loader.classList.add("is-hidden");
+        document.body.classList.remove("no-scroll", "is-loading");
+        document.body.classList.add("is-ready");
+        loader.remove();
+      }
+    }, LOADER_FADE_MS + 200);
+  };
+
+  const scheduleFinish = () => {
+    if (finishScheduled || finished) return;
+    if (!gates.page || !gates.logo) return;
+    finishScheduled = true;
+
+    const elapsed = Date.now() - startedAt;
+    const delay = Math.max(0, LOADER_MIN_MS - elapsed);
+    setTimeout(finishLoader, delay);
+  };
+
+  const markLogoReady = () => {
+    gates.logo = true;
+    scheduleFinish();
+  };
+
+  const markPageReady = () => {
+    gates.page = true;
+    scheduleFinish();
+  };
+
+  const logoImg = DOM.loaderLogo;
+  if (logoImg) {
+    if (logoImg.complete && logoImg.naturalWidth > 0) {
+      markLogoReady();
+    } else {
+      logoImg.addEventListener("load", markLogoReady, { once: true });
+      logoImg.addEventListener("error", markLogoReady, { once: true });
+    }
+  } else {
+    gates.logo = true;
+  }
+
+  if (document.readyState === "complete") {
+    markPageReady();
+  } else {
+    window.addEventListener("load", markPageReady, { once: true });
+  }
+
+  /* Hết thời gian tối đa — vẫn tôn trọng LOADER_MIN_MS */
+  setTimeout(() => {
+    if (finished) return;
+    gates.page = true;
+    gates.logo = true;
+    if (!finishScheduled) {
+      finishScheduled = true;
+      const elapsed = Date.now() - startedAt;
+      const delay = Math.max(0, LOADER_MIN_MS - elapsed);
+      setTimeout(finishLoader, delay);
+    }
+  }, LOADER_MAX_MS);
 };
 
 /* ===== Navbar scroll blur ===== */
@@ -160,6 +249,16 @@ const initActiveNav = () => {
   sections.forEach((section) => observer.observe(section));
 };
 
+/* ===== Stagger delay cho nhóm reveal ===== */
+const initStaggerReveal = () => {
+  document.querySelectorAll("[data-stagger]").forEach((container) => {
+    const step = parseInt(container.dataset.stagger, 10) || 80;
+    container.querySelectorAll(".reveal").forEach((el, index) => {
+      el.style.setProperty("--reveal-delay", `${index * step}ms`);
+    });
+  });
+};
+
 /* ===== Scroll reveal ===== */
 const initScrollReveal = () => {
   const observer = new IntersectionObserver(
@@ -170,10 +269,10 @@ const initScrollReveal = () => {
         observer.unobserve(entry.target);
       });
     },
-    { threshold: 0.1, rootMargin: "0px 0px -36px 0px" }
+    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
   );
 
-  DOM.reveals.forEach((el) => observer.observe(el));
+  document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 };
 
 /* ===== Skill progress bars ===== */
@@ -261,6 +360,7 @@ const boot = () => {
   initHeaderScroll();
   initMobileNav();
   initActiveNav();
+  initStaggerReveal();
   initScrollReveal();
   initSkillBars();
   initCursorGlow();

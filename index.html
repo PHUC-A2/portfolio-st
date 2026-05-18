@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,29 +25,124 @@
     })();
   </script>
   <style>
-    html { background-color: #f8f8fc; color-scheme: light; }
-    html.dark { background-color: #0a0a0f; color-scheme: dark; }
+    html {
+      background-color: #f8f8fc;
+      color-scheme: light;
+    }
+
+    html.dark {
+      background-color: #0a0a0f;
+      color-scheme: dark;
+    }
+
+    /* Critical loader — hiện ngay trước khi style.css tải xong */
+    body.is-loading {
+      overflow: hidden;
+    }
+
+    body.is-loading .header,
+    body.is-loading main {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+
+    #loader.loader {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: grid;
+      place-items: center;
+      overflow: visible;
+      background: linear-gradient(165deg, rgba(10, 12, 22, 0.98) 0%, rgba(14, 16, 32, 0.99) 50%, rgba(8, 10, 18, 1) 100%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    html:not(.dark) #loader.loader {
+      background: linear-gradient(165deg, rgba(248, 248, 252, 0.98) 0%, rgba(236, 238, 248, 0.99) 50%, rgba(248, 248, 252, 1) 100%);
+    }
+
+    .logo-glow-stage--loader {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      overflow: visible;
+    }
+
+    .logo-glow-stage--loader .logo-glow-ring {
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #22d3ee, #3b82f6, #8b5cf6, #a78bfa, #22d3ee);
+      animation: rotateGlow 2.2s linear infinite;
+      will-change: transform;
+    }
+
+    .logo-glow-stage--loader .logo-glow-blur {
+      position: absolute;
+      inset: -16px;
+      border-radius: 50%;
+      background: conic-gradient(from 90deg, rgba(34, 211, 238, 0.9), rgba(59, 130, 246, 0.8), rgba(167, 139, 250, 0.9), rgba(34, 211, 238, 0.9));
+      filter: blur(16px);
+      opacity: 0.85;
+      animation: rotateGlow 2.2s linear infinite;
+      will-change: transform;
+    }
+
+    .logo-glow-stage--loader .logo-glow-pulse {
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      animation: pulseGlow 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes rotateGlow {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulseGlow {
+      from {
+        opacity: 0.55;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
   </style>
-  <meta name="description" content="PHUC KA - Fullstack Developer. Thiết kế và phát triển website, ứng dụng theo yêu cầu. Spring Boot, React, deploy VPS/Docker.">
+  <meta name="description"
+    content="PHUC KA - Fullstack Developer. Thiết kế và phát triển website, ứng dụng theo yêu cầu. Spring Boot, React, deploy VPS/Docker.">
   <meta name="keywords" content="PHUC KA, lập trình viên fullstack, freelancer, website, Spring Boot, React">
   <meta name="author" content="PHUC KA">
   <title>PHUC KA | Fullstack Developer</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0f'/%3E%3Ctext x='32' y='42' font-family='system-ui,sans-serif' font-size='22' font-weight='700' fill='%23b39aff' text-anchor='middle'%3EPK%3C/text%3E%3C/svg%3E">
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0f'/%3E%3Ctext x='32' y='42' font-family='system-ui,sans-serif' font-size='22' font-weight='700' fill='%23b39aff' text-anchor='middle'%3EPK%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap"
+    rel="stylesheet">
+  <link rel="preload" href="./images/lo-go.jpg" as="image">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+
+<body class="is-loading">
   <!-- Loading intro -->
-  <div id="loader" class="loader" aria-hidden="true">
+  <div id="loader" class="loader" aria-live="polite" aria-busy="true">
     <div class="loader__inner">
       <div class="loader__logo">
-        <span class="loader__logo-text">PHUC KA</span>
-        <span class="loader__logo-ring"></span>
+        <div class="logo-glow-stage logo-glow-stage--loader">
+          <span class="logo-glow-ring" aria-hidden="true"></span>
+          <span class="logo-glow-blur" aria-hidden="true"></span>
+          <span class="logo-glow-pulse" aria-hidden="true"></span>
+          <img id="loaderLogoImg" src="./images/lo-go.jpg" alt="PHUC KA Logo" class="nav__logo-img" width="96"
+            height="96" decoding="sync" fetchpriority="high">
+        </div>
       </div>
       <div class="loader__bar"><span class="loader__bar-fill"></span></div>
-      <p class="loader__hint">Đang tải trải nghiệm...</p>
+      <p class="loader__hint">Đang tải...</p>
     </div>
   </div>
 
@@ -56,7 +152,12 @@
   <header class="header" id="header">
     <nav class="nav container" aria-label="Điều hướng chính">
       <a href="#home" class="nav__logo" aria-label="PHUC KA - Trang chủ">
-        <span class="nav__logo-mark">PK</span>
+        <span class="logo-glow-stage">
+          <span class="logo-glow-ring" aria-hidden="true"></span>
+          <span class="logo-glow-blur" aria-hidden="true"></span>
+          <span class="logo-glow-pulse" aria-hidden="true"></span>
+          <img src="./images/lo-go.jpg" alt="" class="nav__logo-img" width="40" height="40" decoding="async">
+        </span>
         <span class="nav__logo-text">PHUC KA</span>
       </a>
 
@@ -88,48 +189,43 @@
       <div class="hero__glow hero__glow--2" aria-hidden="true"></div>
       <div class="container">
         <div class="hero__grid">
-        <div class="hero__text">
-          <p class="hero__badge reveal">
-            <i data-lucide="sparkles"></i>
-            Sẵn sàng nhận dự án mới
-          </p>
-          <h1 class="hero__title reveal">
-            <span class="hero__name">PHUC KA</span>
-            <span class="hero__role">Fullstack Developer</span>
-          </h1>
-          <p class="hero__subtitle reveal">
-            Thiết kế và phát triển website/app theo yêu cầu.
-          </p>
-          <div class="hero__cta reveal">
-            <a href="#projects" class="btn btn--primary">
-              <i data-lucide="folder-kanban"></i>
-              Xem dự án
-            </a>
-            <a href="#contact" class="btn btn--outline">
-              <i data-lucide="send"></i>
-              Liên hệ ngay
-            </a>
+          <div class="hero__text">
+            <p class="hero__badge reveal">
+              <i data-lucide="sparkles"></i>
+              Sẵn sàng nhận dự án mới
+            </p>
+            <h1 class="hero__title reveal">
+              <span class="hero__name">PHUC KA</span>
+              <span class="hero__role">Fullstack Developer</span>
+            </h1>
+            <p class="hero__subtitle reveal">
+              Thiết kế và phát triển website/app theo yêu cầu.
+            </p>
+            <div class="hero__cta reveal">
+              <a href="#projects" class="btn btn--primary">
+                <i data-lucide="folder-kanban"></i>
+                Xem dự án
+              </a>
+              <a href="#contact" class="btn btn--outline">
+                <i data-lucide="send"></i>
+                Liên hệ ngay
+              </a>
+            </div>
           </div>
-        </div>
-        <div class="hero__visual reveal">
-          <div class="hero__image-wrap img-overlay">
-            <img
-              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900&q=80&auto=format&fit=crop"
-              alt="Công nghệ và phát triển phần mềm hiện đại"
-              width="560"
-              height="420"
-              loading="eager"
-            >
+          <div class="hero__visual reveal">
+            <div class="hero__image-wrap img-overlay">
+              <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900&q=80&auto=format&fit=crop"
+                alt="Công nghệ và phát triển phần mềm hiện đại" width="560" height="420" loading="eager">
+            </div>
+            <div class="hero__float hero__float--1 glass reveal reveal-right">
+              <i data-lucide="code-2"></i>
+              <span>Mã sạch</span>
+            </div>
+            <div class="hero__float hero__float--2 glass reveal reveal-left">
+              <i data-lucide="zap"></i>
+              <span>Hiệu năng cao</span>
+            </div>
           </div>
-          <div class="hero__float hero__float--1 glass">
-            <i data-lucide="code-2"></i>
-            <span>Mã sạch</span>
-          </div>
-          <div class="hero__float hero__float--2 glass">
-            <i data-lucide="zap"></i>
-            <span>Hiệu năng cao</span>
-          </div>
-        </div>
         </div>
       </div>
       <a href="#about" class="scroll-indicator" aria-label="Cuộn xuống phần giới thiệu">
@@ -147,26 +243,22 @@
         </header>
 
         <div class="about__layout">
-          <div class="about__profile reveal">
-            <div class="about__avatar img-overlay">
-              <img
-                src="https://images.unsplash.com/photo-1531482615710-2afd69097998?w=500&q=80&auto=format&fit=crop"
-                alt="Developer workspace - PHUC KA"
-                width="400"
-                height="480"
-                loading="lazy"
-              >
+          <div class="about__profile">
+            <div class="about__avatar-wrap reveal reveal-scale">
+              <div class="about__avatar img-overlay">
+                <img src="images/bg.jpg" alt="PHUC KA" width="400" height="400" loading="lazy">
+              </div>
             </div>
-            <div class="about__stats">
-              <div class="stat-card glass">
+            <div class="about__stats" data-stagger="90">
+              <div class="stat-card glass reveal">
                 <strong>15+</strong>
                 <span>Dự án thực tế</span>
               </div>
-              <div class="stat-card glass">
+              <div class="stat-card glass reveal">
                 <strong>Fullstack</strong>
                 <span>Web &amp; hệ thống</span>
               </div>
-              <div class="stat-card glass">
+              <div class="stat-card glass reveal">
                 <strong>24/7</strong>
                 <span>Hỗ trợ deploy</span>
               </div>
@@ -174,7 +266,7 @@
           </div>
 
           <div class="about__content">
-            <div class="about__cards">
+            <div class="about__cards" data-stagger="70">
               <article class="about__card glass reveal">
                 <i data-lucide="graduation-cap"></i>
                 <p>Sinh viên chuyên ngành CNTT tại Trường Đại học Tây Bắc.</p>
@@ -200,7 +292,8 @@
                 <p>Nhận sản phẩm theo yêu cầu riêng, linh hoạt theo nhu cầu.</p>
               </article>
             </div>
-            <a href="https://www.facebook.com/Dev3s.Phuc" class="btn btn--ghost about__fb reveal" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.facebook.com/Dev3s.Phuc" class="btn btn--ghost about__fb reveal" target="_blank"
+              rel="noopener noreferrer">
               <i data-lucide="facebook"></i>
               Facebook: Dev3s.Phuc
             </a>
@@ -227,11 +320,21 @@
               <h3>Backend</h3>
             </div>
             <ul class="skill-list">
-              <li><span>Spring Boot</span><div class="skill-bar" data-level="92"></div></li>
-              <li><span>Laravel</span><div class="skill-bar" data-level="85"></div></li>
-              <li><span>ASP .NET Core</span><div class="skill-bar" data-level="80"></div></li>
-              <li><span>Node.js</span><div class="skill-bar" data-level="88"></div></li>
-              <li><span>Express.js</span><div class="skill-bar" data-level="86"></div></li>
+              <li><span>Spring Boot</span>
+                <div class="skill-bar" data-level="92"></div>
+              </li>
+              <li><span>Laravel</span>
+                <div class="skill-bar" data-level="85"></div>
+              </li>
+              <li><span>ASP .NET Core</span>
+                <div class="skill-bar" data-level="80"></div>
+              </li>
+              <li><span>Node.js</span>
+                <div class="skill-bar" data-level="88"></div>
+              </li>
+              <li><span>Express.js</span>
+                <div class="skill-bar" data-level="86"></div>
+              </li>
             </ul>
           </article>
           <article class="skill-card glass reveal" data-skill>
@@ -240,9 +343,15 @@
               <h3>Frontend</h3>
             </div>
             <ul class="skill-list">
-              <li><span>React TypeScript</span><div class="skill-bar" data-level="90"></div></li>
-              <li><span>Thymeleaf</span><div class="skill-bar" data-level="82"></div></li>
-              <li><span>HTML / CSS / JS</span><div class="skill-bar" data-level="95"></div></li>
+              <li><span>React TypeScript</span>
+                <div class="skill-bar" data-level="90"></div>
+              </li>
+              <li><span>Thymeleaf</span>
+                <div class="skill-bar" data-level="82"></div>
+              </li>
+              <li><span>HTML / CSS / JS</span>
+                <div class="skill-bar" data-level="95"></div>
+              </li>
             </ul>
           </article>
           <article class="skill-card glass reveal" data-skill>
@@ -251,22 +360,23 @@
               <h3>Database</h3>
             </div>
             <ul class="skill-list">
-              <li><span>MySQL</span><div class="skill-bar" data-level="90"></div></li>
-              <li><span>SQL Server</span><div class="skill-bar" data-level="85"></div></li>
-              <li><span>MongoDB</span><div class="skill-bar" data-level="83"></div></li>
+              <li><span>MySQL</span>
+                <div class="skill-bar" data-level="90"></div>
+              </li>
+              <li><span>SQL Server</span>
+                <div class="skill-bar" data-level="85"></div>
+              </li>
+              <li><span>MongoDB</span>
+                <div class="skill-bar" data-level="83"></div>
+              </li>
             </ul>
           </article>
         </div>
 
         <div class="skills__visual reveal">
           <div class="skills__img img-overlay">
-            <img
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=80&auto=format&fit=crop"
-              alt="Coding setup - workspace developer"
-              width="800"
-              height="450"
-              loading="lazy"
-            >
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=80&auto=format&fit=crop"
+              alt="Coding setup - workspace developer" width="800" height="450" loading="lazy">
           </div>
         </div>
       </div>
@@ -280,23 +390,16 @@
           <span class="section__tag">Dự án</span>
           <h2 class="section__title">Dự án đã triển khai</h2>
           <p class="section__desc reveal">
-            Tuyển chọn các sản phẩm thực tế — tập trung trải nghiệm người dùng, hiệu năng và giải pháp có thể vận hành lâu dài.
+            Tuyển chọn các sản phẩm thực tế — tập trung trải nghiệm người dùng, hiệu năng và giải pháp có thể vận hành
+            lâu dài.
           </p>
         </header>
 
         <article class="project-featured reveal">
-          <a
-            href="http://tbusport.utb.edu.vn"
-            class="project-featured__visual img-overlay"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Xem TBUSPORT live"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1400&q=85&auto=format&fit=crop"
-              alt="TBUSPORT — Hệ thống đặt lịch sân bóng"
-              loading="lazy"
-            >
+          <a href="http://tbusport.utb.edu.vn" class="project-featured__visual img-overlay" target="_blank"
+            rel="noopener noreferrer" aria-label="Xem TBUSPORT live">
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1400&q=85&auto=format&fit=crop"
+              alt="TBUSPORT — Hệ thống đặt lịch sân bóng" loading="lazy">
             <span class="project-featured__label">Dự án nổi bật</span>
             <span class="project-featured__hover">
               Xem live site
@@ -310,9 +413,11 @@
             </div>
             <h3 class="project-featured__title">TBUSPORT</h3>
             <p class="project-featured__desc">
-              Hệ thống đặt lịch sân bóng cho Đại học Tây Bắc — quản lý sân, khung giờ, người dùng và luồng đặt lịch trực tuyến.
+              Hệ thống đặt lịch sân bóng cho Đại học Tây Bắc — quản lý sân, khung giờ, người dùng và luồng đặt lịch trực
+              tuyến.
             </p>
-            <a href="http://tbusport.utb.edu.vn" class="project-featured__link" target="_blank" rel="noopener noreferrer">
+            <a href="http://tbusport.utb.edu.vn" class="project-featured__link" target="_blank"
+              rel="noopener noreferrer">
               tbusport.utb.edu.vn
               <i data-lucide="external-link"></i>
             </a>
@@ -322,81 +427,71 @@
         <div class="projects__list">
           <article class="project-row reveal">
             <div class="project-row__visual img-overlay">
-              <img
-                src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=900&q=80&auto=format&fit=crop"
-                alt="Hệ thống đặt lịch sân bóng"
-                loading="lazy"
-              >
+              <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=900&q=80&auto=format&fit=crop"
+                alt="Hệ thống đặt lịch sân bóng" loading="lazy">
             </div>
             <div class="project-row__content">
               <span class="project-row__index">02</span>
               <p class="project-row__stack">Spring Boot · React · MySQL</p>
               <h3 class="project-row__title">Hệ thống đặt lịch sân bóng</h3>
-              <p class="project-row__desc">Quản lý lịch, sân và người dùng trên nền web — giao diện rõ ràng, luồng đặt sân tối giản.</p>
+              <p class="project-row__desc">Quản lý lịch, sân và người dùng trên nền web — giao diện rõ ràng, luồng đặt
+                sân tối giản.</p>
             </div>
           </article>
 
           <article class="project-row project-row--reverse reveal">
             <div class="project-row__visual img-overlay">
-              <img
-                src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=80&auto=format&fit=crop"
-                alt="Website quản lý thuê phòng"
-                loading="lazy"
-              >
+              <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=80&auto=format&fit=crop"
+                alt="Website quản lý thuê phòng" loading="lazy">
             </div>
             <div class="project-row__content">
               <span class="project-row__index">03</span>
               <p class="project-row__stack">Laravel · React · MySQL</p>
               <h3 class="project-row__title">Website quản lý thuê phòng</h3>
-              <p class="project-row__desc">Phòng, hợp đồng, thanh toán và báo cáo — tập trung vận hành nội bộ cho chủ nhà.</p>
+              <p class="project-row__desc">Phòng, hợp đồng, thanh toán và báo cáo — tập trung vận hành nội bộ cho chủ
+                nhà.</p>
             </div>
           </article>
 
           <article class="project-row reveal">
             <div class="project-row__visual img-overlay">
-              <img
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80&auto=format&fit=crop"
-                alt="Landing page sản phẩm"
-                loading="lazy"
-              >
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80&auto=format&fit=crop"
+                alt="Landing page sản phẩm" loading="lazy">
             </div>
             <div class="project-row__content">
               <span class="project-row__index">04</span>
               <p class="project-row__stack">Node.js · HTML/CSS · MongoDB</p>
               <h3 class="project-row__title">Landing page sản phẩm</h3>
-              <p class="project-row__desc">Trang đích chuyển đổi cao, bố cục storytelling và CTA rõ ràng cho chiến dịch marketing.</p>
+              <p class="project-row__desc">Trang đích chuyển đổi cao, bố cục storytelling và CTA rõ ràng cho chiến dịch
+                marketing.</p>
             </div>
           </article>
 
           <article class="project-row project-row--reverse reveal">
             <div class="project-row__visual img-overlay">
-              <img
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop"
-                alt="Dashboard quản lý"
-                loading="lazy"
-              >
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop"
+                alt="Dashboard quản lý" loading="lazy">
             </div>
             <div class="project-row__content">
               <span class="project-row__index">05</span>
               <p class="project-row__stack">Spring Boot · React TS · MySQL</p>
               <h3 class="project-row__title">Dashboard quản lý</h3>
-              <p class="project-row__desc">Biểu đồ, thống kê và quản trị hệ thống — dữ liệu trực quan, bảng điều khiển tập trung.</p>
+              <p class="project-row__desc">Biểu đồ, thống kê và quản trị hệ thống — dữ liệu trực quan, bảng điều khiển
+                tập trung.</p>
             </div>
           </article>
 
           <article class="project-row reveal">
             <div class="project-row__visual img-overlay">
-              <img
-                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80&auto=format&fit=crop"
-                alt="Website doanh nghiệp"
-                loading="lazy"
-              >
+              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80&auto=format&fit=crop"
+                alt="Website doanh nghiệp" loading="lazy">
             </div>
             <div class="project-row__content">
               <span class="project-row__index">06</span>
               <p class="project-row__stack">Laravel · HTML/CSS · MySQL</p>
               <h3 class="project-row__title">Website doanh nghiệp</h3>
-              <p class="project-row__desc">Thương hiệu chuyên nghiệp, tốc độ tải nhanh và chuẩn SEO cho hiện diện trực tuyến.</p>
+              <p class="project-row__desc">Thương hiệu chuyên nghiệp, tốc độ tải nhanh và chuẩn SEO cho hiện diện trực
+                tuyến.</p>
             </div>
           </article>
         </div>
@@ -417,13 +512,8 @@
         <div class="services__layout">
           <div class="services__visual reveal">
             <div class="services__img img-overlay">
-              <img
-                src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&auto=format&fit=crop"
-                alt="Server và DevOps infrastructure"
-                width="700"
-                height="460"
-                loading="lazy"
-              >
+              <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&auto=format&fit=crop"
+                alt="Server và DevOps infrastructure" width="700" height="460" loading="lazy">
             </div>
           </div>
           <ul class="services__list reveal">
@@ -471,13 +561,8 @@
 
         <div class="contact__layout">
           <div class="contact__banner reveal img-overlay">
-            <img
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&q=80&auto=format&fit=crop"
-              alt="Team collaboration - liên hệ dự án"
-              width="900"
-              height="320"
-              loading="lazy"
-            >
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&q=80&auto=format&fit=crop"
+              alt="Team collaboration - liên hệ dự án" width="900" height="320" loading="lazy">
             <div class="contact__banner-text">
               <h3>Sẵn sàng bắt đầu dự án của bạn?</h3>
               <p>Trao đổi nhanh qua Messenger hoặc Facebook.</p>
@@ -485,12 +570,14 @@
           </div>
 
           <div class="contact__grid">
-            <a href="https://www.facebook.com/Dev3s.Phuc" class="contact-card glass reveal" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.facebook.com/Dev3s.Phuc" class="contact-card glass reveal" target="_blank"
+              rel="noopener noreferrer">
               <i data-lucide="facebook"></i>
               <h3>Facebook</h3>
               <p>Dev3s.Phuc</p>
             </a>
-            <a href="https://m.me/Dev3s.Phuc" class="contact-card glass reveal" target="_blank" rel="noopener noreferrer">
+            <a href="https://m.me/Dev3s.Phuc" class="contact-card glass reveal" target="_blank"
+              rel="noopener noreferrer">
               <i data-lucide="message-circle"></i>
               <h3>Messenger</h3>
               <p>m.me/Dev3s.Phuc</p>
@@ -519,7 +606,8 @@
     </div>
   </footer>
 
-  <a href="https://m.me/Dev3s.Phuc" class="messenger-fab" target="_blank" rel="noopener noreferrer" aria-label="Nhắn tin Messenger">
+  <a href="https://m.me/Dev3s.Phuc" class="messenger-fab" target="_blank" rel="noopener noreferrer"
+    aria-label="Nhắn tin Messenger">
     <span class="messenger-fab__pulse" aria-hidden="true"></span>
     <span class="messenger-fab__glow" aria-hidden="true"></span>
     <i data-lucide="message-circle"></i>
@@ -528,4 +616,5 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
