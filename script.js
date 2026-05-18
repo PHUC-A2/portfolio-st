@@ -421,6 +421,7 @@ const TRANSLATE_LANGUAGES_RAW = [
 const TRANSLATE_LANGUAGES = TRANSLATE_LANGUAGES_RAW.filter((item, index, arr) => {
   return arr.findIndex((x) => x.lang === item.lang) === index;
 });
+
 const I18N_QUEUE_CONCURRENCY = 10;
 const I18N_PERSIST_FLUSH_MS = 500;
 

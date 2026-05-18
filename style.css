@@ -763,11 +763,27 @@ body.is-ready .cursor-glow { opacity: 1; }
 }
 
 .nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   padding: 0.45rem 0.75rem;
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-text-muted);
   border-radius: var(--radius-sm);
+}
+
+.nav__link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.85;
+  transition: opacity var(--transition);
+}
+
+.nav__link:hover svg,
+.nav__link.active svg {
+  opacity: 1;
 }
 
 .nav__link:hover,
@@ -2134,6 +2150,12 @@ html:not(.dark) body.nav-open::after {
 
   .nav__link {
     padding: 0.85rem 1rem;
+    width: 100%;
+  }
+
+  .nav__link svg {
+    width: 18px;
+    height: 18px;
   }
 
   .section__glow {
