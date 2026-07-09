@@ -1,0 +1,7 @@
+name = "portfolio-st"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "VIEWS_KV"
+id = "d1725351fc0a4ed2a50db087bcd71bb0"

@@ -1067,6 +1067,90 @@ const initSmoothAnchor = () => {
   });
 };
 
+/* ===== Lượt xem trang (Cloudflare Pages Function + KV) ===== */
+const VIEWS_API = "/api/views";
+const VIEW_SESSION_KEY = "phuc-ka-view-session";
+const VIEW_COUNT_ANIM_MS = 900;
+
+const formatViewCount = (value) => {
+  const n = Math.max(0, Math.round(Number(value) || 0));
+  return n.toLocaleString("vi-VN");
+};
+
+const animateViewCount = (el, from, to) => {
+  const start = Math.max(0, Math.round(Number(from) || 0));
+  const end = Math.max(0, Math.round(Number(to) || 0));
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || start === end) {
+    el.textContent = formatViewCount(end);
+    el.dataset.value = String(end);
+    return;
+  }
+
+  const t0 = performance.now();
+
+  const tick = (now) => {
+    const p = Math.min((now - t0) / VIEW_COUNT_ANIM_MS, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const current = Math.round(start + (end - start) * eased);
+    el.textContent = formatViewCount(current);
+    el.dataset.value = String(current);
+    if (p < 1) requestAnimationFrame(tick);
+  };
+
+  requestAnimationFrame(tick);
+};
+
+const fetchViewCount = async () => {
+  const res = await fetch(VIEWS_API, {
+    method: "GET",
+    cache: "no-store",
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) throw new Error(`GET ${res.status}`);
+  const data = await res.json();
+  return Math.max(0, parseInt(data.count, 10) || 0);
+};
+
+const recordViewVisit = async () => {
+  const res = await fetch(VIEWS_API, {
+    method: "POST",
+    cache: "no-store",
+    headers: { Accept: "application/json" },
+  });
+  if (!res.ok) throw new Error(`POST ${res.status}`);
+  const data = await res.json();
+  return {
+    count: Math.max(0, parseInt(data.count, 10) || 0),
+    incremented: Boolean(data.incremented),
+  };
+};
+
+const initPageViews = async () => {
+  const wrap = document.getElementById("viewCounter");
+  const el = document.getElementById("viewCount");
+  if (!wrap || !el) return;
+
+  wrap.classList.add("is-ready");
+  initIcons(wrap);
+
+  const hasSession = sessionStorage.getItem(VIEW_SESSION_KEY) === "1";
+
+  try {
+    if (hasSession) {
+      const count = await fetchViewCount();
+      animateViewCount(el, 0, count);
+      return;
+    }
+
+    const result = await recordViewVisit();
+    sessionStorage.setItem(VIEW_SESSION_KEY, "1");
+    animateViewCount(el, 0, result.count);
+  } catch {
+    el.textContent = "—";
+  }
+};
+
 /* ===== Khởi chạy ===== */
 const boot = () => {
   cacheDOM();
@@ -1082,6 +1166,7 @@ const boot = () => {
   initButtonRipple();
   initSmoothAnchor();
   initAutoTranslate();
+  initPageViews();
   initIcons();
 
   /* Đồng bộ meta theme sau khi DOM sẵn sàng */
